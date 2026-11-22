@@ -15,13 +15,13 @@ ser representable, no depende de un `if` que alguien pueda olvidar.
 | Fase | Estado |
 |---|---|
 | 0 — Documentación (visión, requisitos, ADRs, dominio) | ✅ |
-| 1 — Núcleo de dominio puro (`Money`, `Order`, eventos) | ⬜ |
+| 1 — Núcleo de dominio puro (`Money`, `Order`, eventos) | ✅ |
 | 2 — Persistencia y outbox (`pgx`/`sqlc`/`goose`, Kafka) | ⬜ |
 | 3 — Saga `PlaceOrder` con compensaciones | ⬜ |
 | 4 — Capa HTTP (OpenAPI + `chi`) | ⬜ |
 | 5 — Worker, SSE y webhooks | ⬜ |
 
-Sin código todavía. Esta carpeta contiene solo documentación.
+Código del hito 1 en `internal/`: dominio puro, sin DB ni HTTP.
 
 ## Principios rectores
 

@@ -13,7 +13,7 @@ objects, catálogo de eventos/comandos, stack, escenarios, ADRs.
 requisito tiene un ADR que lo decide; cada VO tiene invariantes + JSON + SQL;
 cada término del glosario aparece con un único identificador en código.
 
-## Hito 1 — Núcleo de dominio puro
+## Hito 1 — Núcleo de dominio puro ✅
 
 **Alcance:** `Money`, IDs tipados, `Order` con `Pay`, eventos de dominio, errores
 de dominio. Sin DB, sin HTTP, sin bus.
