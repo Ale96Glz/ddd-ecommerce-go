@@ -1,0 +1,15 @@
+# Binarios locales (go build ./cmd/...)
+/catalog
+/catalog.exe
+/orders
+/orders.exe
+/payments
+/payments.exe
+
+# Tests y cobertura
+*.test
+*.out
+coverage.out
+
+# Entorno local
+.env
