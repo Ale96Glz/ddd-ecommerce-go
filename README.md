@@ -1,20 +1,22 @@
-# ecommerce-go — DDD táctico en Go moderno
+# ddd-commerce-go — DDD táctico en Go moderno
 
-Proyecto de **aprendizaje y portafolio**: un backend de e-commerce escrito en Go,
-usando DDD táctico (value objects, agregados, eventos de dominio, repositorios),
-**outbox** y **sagas** como process manager explícito.
+Backend de e-commerce de **aprendizaje y portafolio**, escrito en Go con DDD
+táctico (value objects, agregados, eventos de dominio, repositorios), **outbox
+transaccional** y **sagas** como process manager explícito.
 
-No es un port ni una traducción del repo Java `ecommerce-microservices`. Es el
-mismo dominio, rediseñado como se haría hoy: menos servicios, contratos mejores y
-**corrección por diseño** (el bug `monto ≠ total` deja de ser posible por tipos).
+El proyecto nace con una tesis clara: un e-commerce no se define por cuántos
+servicios tiene, sino por **contratos claros, límites correctos e invariantes
+imposibles de violar**. Por eso las reglas de negocio viven en el tipo: el pago
+recibe un `Money` igual al total del pedido y la diferencia de importes deja de
+ser representable, no depende de un `if` que alguien pueda olvidar.
 
 ## Estado
 
 | Fase | Estado |
 |---|---|
-| 0 — Documentación (visión, requisitos, ADRs, dominio) | ✅ En curso |
+| 0 — Documentación (visión, requisitos, ADRs, dominio) | ✅ |
 | 1 — Núcleo de dominio puro (`Money`, `Order`, eventos) | ⬜ |
-| 2 — Persistencia + outbox (`pgx`/`sqlc`/`goose`) | ⬜ |
+| 2 — Persistencia y outbox (`pgx`/`sqlc`/`goose`, Kafka) | ⬜ |
 | 3 — Saga `PlaceOrder` con compensaciones | ⬜ |
 | 4 — Capa HTTP (OpenAPI + `chi`) | ⬜ |
 | 5 — Worker, SSE y webhooks | ⬜ |
@@ -34,6 +36,18 @@ Sin código todavía. Esta carpeta contiene solo documentación.
 6. **Todo POST de dinero es idempotente** por `Idempotency-Key`.
 7. **La documentación es parte del entregable.** Cada decisión tiene su ADR.
 
+## Qué demuestra
+
+- **DDD táctico real:** value objects con invariantes, agregados que emiten
+  eventos, repositorios por contexto y un glosario oficial.
+- **Microservicios separados:** un proceso y una BD por contexto, cero tablas
+  compartidas y una saga que compensa entre servicios.
+- **Corrección bajo fallos:** outbox durable, relay con `FOR UPDATE SKIP LOCKED`,
+  Kafka con dedup por `event_id` y DLT.
+- **Concurrencia en Go:** consumer groups, idempotencia y apagado graceful.
+- **Calidad de ingeniería:** tests puros de dominio, `testcontainers` y ADRs que
+  explican el porqué de cada decisión.
+
 ## Documentación
 
 | Documento | Contenido |
@@ -48,12 +62,3 @@ Sin código todavía. Esta carpeta contiene solo documentación.
 | [Escenarios](./docs/escenarios.md) | Flujos de compra y contrato HTTP esperado |
 | [Roadmap](./docs/roadmap.md) | Hitos, alcance y test de aceptación de cada uno |
 | [ADRs](./docs/adr/README.md) | Decisiones de arquitectura (formato Michael Nygard) |
-
-## Inspiración (no copia)
-
-El repo Java `ecommerce-microservices` aporta el **dominio y los escenarios**, no
-el diseño. Sus ADR-0013 (compensación), 0014 (contrato 201), 0016 (reintento),
-0019 (outbox ack) y 0020 (`monto = total`) se releen aquí y se rediseñan con las
-herramientas que Go ofrece hoy. La suite SDET de ese repo sirve de referencia de
-comportamiento observable, no de contrato a replicar literalmente (el contrato
-nuevo usa RFC 9457 e `Idempotency-Key`).
