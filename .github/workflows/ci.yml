@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  go:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: Instalar sqlc
+        run: go install github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1
+
+      - name: Generar código SQL
+        run: sqlc generate
+
+      - name: Comprobar que el código generado está actualizado
+        run: git diff --exit-code
+
+      - name: Verificar formato
+        run: test -z "$(gofmt -l cmd internal)"
+
+      - name: Analizar
+        run: go vet ./...
+
+      - name: Probar
+        run: go test ./...
+
+      - name: Compilar
+        run: go build ./...
