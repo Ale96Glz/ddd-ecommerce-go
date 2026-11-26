@@ -9,10 +9,10 @@ import (
 )
 
 var (
-	ErrInvalidQuantity = errors.New("quantity must be between 1 and 1000000")
-	ErrEmptyOrder      = errors.New("order requires at least one item")
-	ErrAmountMismatch  = errors.New("amount does not match order total")
-	ErrInvalidState    = errors.New("order is not in a mutable state")
+	ErrInvalidQuantity = errors.New("La cantidad debe estar entre 1 y 1000000")
+	ErrEmptyOrder      = errors.New("El pedido debe tener al menos un ítem")
+	ErrAmountMismatch  = errors.New("El monto no coincide con el total del pedido")
+	ErrInvalidState    = errors.New("El pedido no está en un estado modificable")
 )
 
 type OrderStatus string
@@ -112,7 +112,13 @@ func (o *Order) Cancel() error {
 }
 
 func (o Order) ID() id.OrderID               { return o.id }
+func (o Order) CustomerID() id.CustomerID    { return o.customerID }
+func (o Order) Items() []OrderItem           { return append([]OrderItem(nil), o.items...) }
 func (o Order) Total() money.Money           { return o.total }
 func (o Order) Status() OrderStatus          { return o.status }
 func (o Order) Version() int                 { return o.version }
 func (o Order) Events() []events.DomainEvent { return append([]events.DomainEvent(nil), o.events...) }
+
+func (i OrderItem) ProductID() id.ProductID { return i.productID }
+func (i OrderItem) UnitPrice() money.Money  { return i.unitPrice }
+func (i OrderItem) Quantity() uint32        { return i.quantity }
