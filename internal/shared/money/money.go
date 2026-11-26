@@ -7,12 +7,12 @@ import (
 )
 
 var (
-	ErrNegativeAmount   = errors.New("amount must not be negative")
-	ErrInvalidCurrency  = errors.New("invalid currency")
-	ErrCurrencyMismatch = errors.New("currency mismatch")
+	ErrNegativeAmount   = errors.New("La cantidad no puede ser negativa")
+	ErrInvalidCurrency  = errors.New("La moneda no es válida")
+	ErrCurrencyMismatch = errors.New("Las monedas no coinciden")
 )
 
-// Money is an immutable amount in cents with an ISO 4217 currency.
+// Money es una cantidad inmutable en centavos con moneda ISO 4217.
 type Money struct {
 	cents    int64
 	currency string

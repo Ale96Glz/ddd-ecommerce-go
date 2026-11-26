@@ -3,5 +3,5 @@ package main
 import "log"
 
 func main() {
-	log.Println("catalog-service: skeleton")
+	log.Println("catalog-service: cascarón inicial")
 }

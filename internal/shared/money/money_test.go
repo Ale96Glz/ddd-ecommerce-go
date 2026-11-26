@@ -10,13 +10,13 @@ import (
 
 func TestNewMoney_RejectsNegativeAmount(t *testing.T) {
 	if _, err := money.NewMoney(-1, "EUR"); !errors.Is(err, money.ErrNegativeAmount) {
-		t.Fatalf("got %v, want ErrNegativeAmount", err)
+		t.Fatalf("Se obtuvo %v, se esperaba ErrNegativeAmount", err)
 	}
 }
 
 func TestNewMoney_RejectsEmptyCurrency(t *testing.T) {
 	if _, err := money.NewMoney(100, ""); !errors.Is(err, money.ErrInvalidCurrency) {
-		t.Fatalf("got %v, want ErrInvalidCurrency", err)
+		t.Fatalf("Se obtuvo %v, se esperaba ErrInvalidCurrency", err)
 	}
 }
 
@@ -25,7 +25,7 @@ func TestMoney_Add_CurrencyMismatch(t *testing.T) {
 	b, _ := money.NewMoney(1, "USD")
 
 	if _, err := a.Add(b); !errors.Is(err, money.ErrCurrencyMismatch) {
-		t.Fatalf("got %v, want ErrCurrencyMismatch", err)
+		t.Fatalf("Se obtuvo %v, se esperaba ErrCurrencyMismatch", err)
 	}
 }
 
@@ -35,11 +35,11 @@ func TestMoney_AddAndSubtract(t *testing.T) {
 
 	sum, err := a.Add(b)
 	if err != nil || sum.Cents() != 3500 {
-		t.Fatalf("Add = %v, %v; want 3500", sum, err)
+		t.Fatalf("Suma = %v, %v; se esperaba 3500", sum, err)
 	}
 	rest, err := a.Subtract(b)
 	if err != nil || rest.Cents() != 2500 {
-		t.Fatalf("Subtract = %v, %v; want 2500", rest, err)
+		t.Fatalf("Resta = %v, %v; se esperaba 2500", rest, err)
 	}
 }
 
@@ -49,10 +49,10 @@ func TestMoney_Equals(t *testing.T) {
 	c, _ := money.NewMoney(3000, "USD")
 
 	if !a.Equals(b) {
-		t.Fatal("same cents and currency must be equal")
+		t.Fatal("Los centavos y la moneda iguales deben ser equivalentes")
 	}
 	if a.Equals(c) {
-		t.Fatal("different currencies must not be equal")
+		t.Fatal("Monedas distintas no deben ser equivalentes")
 	}
 }
 
@@ -64,7 +64,7 @@ func TestMoney_JSONRoundTrip(t *testing.T) {
 		t.Fatal(err)
 	}
 	if want := `{"amount":3000,"currency":"EUR"}`; string(data) != want {
-		t.Fatalf("JSON = %s, want %s", data, want)
+		t.Fatalf("JSON = %s, se esperaba %s", data, want)
 	}
 
 	var decoded money.Money
@@ -72,7 +72,7 @@ func TestMoney_JSONRoundTrip(t *testing.T) {
 		t.Fatal(err)
 	}
 	if !decoded.Equals(original) {
-		t.Fatalf("round trip = %v, want %v", decoded, original)
+		t.Fatalf("Ida y vuelta = %v, se esperaba %v", decoded, original)
 	}
 }
 
@@ -80,6 +80,6 @@ func TestMoney_UnmarshalJSON_RejectsNegativeAmount(t *testing.T) {
 	var decoded money.Money
 	err := json.Unmarshal([]byte(`{"amount":-1,"currency":"EUR"}`), &decoded)
 	if !errors.Is(err, money.ErrNegativeAmount) {
-		t.Fatalf("got %v, want ErrNegativeAmount", err)
+		t.Fatalf("Se obtuvo %v, se esperaba ErrNegativeAmount", err)
 	}
 }

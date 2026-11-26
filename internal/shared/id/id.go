@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 )
 
-var ErrInvalidID = errors.New("invalid id")
+var ErrInvalidID = errors.New("El identificador no es válido")
 
 type OrderID uuid.UUID
 type ProductID uuid.UUID

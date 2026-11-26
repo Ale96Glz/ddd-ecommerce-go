@@ -2,7 +2,7 @@ package events
 
 import "time"
 
-// DomainEvent is the envelope shared by every context. It is immutable.
+// DomainEvent es la envelope compartida por todos los contextos. Es inmutable.
 type DomainEvent interface {
 	EventID() string
 	AggregateID() string
